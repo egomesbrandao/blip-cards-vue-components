@@ -5,8 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
-    #branches-ignore: "/^v\\d+\\.\\d+\\.\\d+$/"
+    branches: [ master ]    
   pull_request:
     branches: [ master ]
 
@@ -17,21 +16,21 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [10.x]        
 
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: ${{ matrix.node-version }}        
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     - run: npm ci
     - run: npm run build --if-present
-    # From TravisCI
     - run: npm i -g npm@^5.0.0 
     - run: npm prune
     - run: npm run lint
     - run: npm run bundle:min   
     - run: npm run semantic-release
-# Comentario
